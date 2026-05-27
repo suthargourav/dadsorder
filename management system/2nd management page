@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>ZenithHR | Employee System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+        }
+
+        body {
+            background: #f0f4f8;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* ========= LOGIN PAGE ========= */
+        .login-wrapper {
+            display: flex;
+            width: 100%;
+            height: 100vh;
+            background: linear-gradient(145deg, #0b2b3b 0%, #1a4c6e 100%);
+        }
+
+        .hero-panel {
+            flex: 1.2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 4rem;
+            color: white;
+            backdrop-filter: blur(2px);
+        }
+
+        .hero-panel h1 {
+            font-size: 3.8rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #FFE6B0, #FFB347);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .hero-panel .tagline {
+            font-size: 1.2rem;
+            margin: 0.75rem 0 1rem;
+            opacity: 0.9;
+        }
+
+        .feature-list {
+            margin-top: 2rem;
+            list-style: none;
+        }
+
+        .feature-list li {
+            margin: 0.8rem 0;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .login-card {
+            flex: 0.9;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(12px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 40px 0 0 40px;
+            box-shadow: -10px 0 30px rgba(0,0,0,0.1);
+        }
+
+        .form-container {
+            width: 340px;
+            background: white;
+            padding: 2.5rem;
+            border-radius: 36px;
+            box-shadow: 0 25px 45px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+
+        .form-container h2 {
+            font-size: 2rem;
+            margin-bottom: 1.8rem;
+            color: #1e2f3e;
+            font-weight: 600;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 500;
+            margin-bottom: 0.4rem;
+            color: #2c3e4e;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 24px;
+            font-size: 0.95rem;
+            transition: all 0.2s;
+            outline: none;
+        }
+
+        .input-group input:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+        }
+
+        .login-btn {
+            width: 100%;
+            background: #0f3b4f;
+            border: none;
+            padding: 12px;
+            border-radius: 32px;
+            font-weight: 600;
+            font-size: 1rem;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+            margin-top: 8px;
+        }
+
+        .login-btn:hover {
+            background: #1e5a7a;
+            transform: scale(0.98);
+        }
+
+        .error-msg {
+            color: #e53e3e;
+            font-size: 0.85rem;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        /* ========= DASHBOARD LAYOUT (UNIVERSAL) ========= */
+        .dashboard-container {
+            display: flex;
+            height: 100vh;
+            width: 100%;
+            background: #f1f5f9;
+        }
+
+        /* SIDEBAR MODERN */
+        .sidebar-modern {
+            width: 280px;
+            background: #0f172a;
+            backdrop-filter: blur(4px);
+            color: #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 4px 0 20px rgba(0,0,0,0.08);
+            transition: all 0.2s;
+        }
+
+        .sidebar-header {
+            padding: 2rem 1.5rem 1.5rem;
+            border-bottom: 1px solid #334155;
+        }
+
+        .sidebar-header h3 {
+            font-size: 1.7rem;
+            font-weight: 700;
+            background: linear-gradient(120deg, #facc15, #38bdf8);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .sidebar-header p {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            margin-top: 6px;
+        }
+
+        .nav-menu {
+            flex: 1;
+            padding: 2rem 0 0 0;
+        }
+
+        .nav-item {
+            padding: 12px 24px;
+            margin: 6px 12px;
+            border-radius: 40px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #cbd5e1;
+        }
+
+        .nav-item:hover {
+            background: #1e293b;
+            color: white;
+        }
+
+        .nav-active {
+            background: #2563eb;
+            color: white;
+            box-shadow: 0 4px 8px rgba(37,99,235,0.3);
+        }
+
+        /* MAIN CONTENT */
+        .main-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        .top-navbar {
+            background: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #e2e8f0;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .welcome-text {
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: #0f172a;
+        }
+
+        .user-actions {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            position: relative;
+        }
+
+        .icon-btn {
+            background: #f1f5f9;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .profile-dropdown {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            right: 0;
+            top: 48px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 35px -8px rgba(0,0,0,0.2);
+            width: 140px;
+            z-index: 100;
+            display: none;
+            overflow: hidden;
+        }
+
+        .dropdown-menu p {
+            padding: 12px 20px;
+            margin: 0;
+            transition: 0.1s;
+            font-weight: 500;
+        }
+
+        .dropdown-menu p:hover {
+            background: #f1f5f9;
+        }
+
+        .notification-badge {
+            position: relative;
+        }
+
+        .notification-drop {
+            position: absolute;
+            right: 0;
+            top: 50px;
+            background: white;
+            width: 260px;
+            border-radius: 20px;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+            padding: 12px;
+            display: none;
+            z-index: 99;
+        }
+
+        /* page content */
+        .page-view {
+            padding: 2rem;
+            display: none;
+            animation: fade 0.2s ease;
+        }
+
+        .active-page {
+            display: block;
+        }
+
+        @keyframes fade {
+            from { opacity: 0; transform: translateY(6px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+
+        .card-stats {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 28px;
+            padding: 1.5rem 2rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.03);
+            border: 1px solid #eef2ff;
+            min-width: 160px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        input, button {
+            border-radius: 40px;
+        }
+
+        .modern-input {
+            padding: 12px 18px;
+            border: 1px solid #cbd5e1;
+            border-radius: 40px;
+            outline: none;
+            background: white;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            border: none;
+            padding: 10px 22px;
+            border-radius: 40px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .list-modern {
+            list-style: none;
+            margin-top: 20px;
+        }
+
+        .list-modern li {
+            background: white;
+            margin: 10px 0;
+            padding: 14px 18px;
+            border-radius: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .delete-btn {
+            background: #fee2e2;
+            border: none;
+            padding: 5px 14px;
+            border-radius: 40px;
+            color: #b91c1c;
+            cursor: pointer;
+        }
+
+        hr {
+            margin: 16px 0;
+        }
+    </style>
+</head>
+<body>
+
+<!-- LOGIN SECTION -->
+<div id="loginRoot" class="login-wrapper">
+    <div class="hero-panel">
+        <h1>CODINWALK</h1>
+        <div class="tagline">Software Company • Jaipur</div>
+        <p style="margin-top: 12px; max-width: 80%;">Next‑gen employee experience & administration</p>
+        <ul class="feature-list">
+            <li>✓ Smart Dashboard</li>
+            <li>✓ Attendance & Reports</li>
+            <li>✓ Admin & User dual panel</li>
+        </ul>
+    </div>
+    <div class="login-card">
+        <div class="form-container">
+            <h2>Access Portal</h2>
+            <div class="input-group">
+                <label>Email / Username</label>
+                <input type="text" id="loginEmail" placeholder="employee@codinwalk.com">
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="loginPassword" placeholder="••••••">
+            </div>
+            <button class="login-btn" id="doLoginBtn">Sign in →</button>
+            <div id="globalError" class="error-msg"></div>
+            <p style="font-size: 12px; text-align: center; margin-top: 20px;">Demo: any password for USER | admin:12345</p>
+        </div>
+    </div>
+</div>
+
+<!-- DASHBOARD CONTAINER (hidden initially) -->
+<div id="dashboardRoot" style="display: none;"></div>
+
+<script>
+    // ---------- GLOBAL STORES ----------
+    let currentRole = null;      // "admin" or "user"
+    let currentUserName = "";
+    
+    // Data models
+    let employees = [
+        { id: 1, name: "Aarav Sharma", email: "aarav@codinwalk.com" },
+        { id: 2, name: "Zara Khan", email: "zara@codinwalk.com" }
+    ];
+    let projects = ["HR Pulse", "DevOps Suite", "Mobile App"];
+    let tasks = ["Design review", "Frontend module", "Backend API"];
+    let attendanceRecords = [];   // { user: name, timestamp, type }
+    
+    // Helper: unique ID
+    let nextEmpId = 3;
+    
+    // -------- RENDER HELPERS ----------
+    function updateCounters() {
+        if(currentRole === "admin") {
+            document.getElementById("adminEmpCount") && (document.getElementById("adminEmpCount").innerText = employees.length);
+            document.getElementById("adminProjCount") && (document.getElementById("adminProjCount").innerText = projects.length);
+            document.getElementById("adminTaskCount") && (document.getElementById("adminTaskCount").innerText = tasks.length);
+        } else if(currentRole === "user") {
+            document.getElementById("userEmpCount") && (document.getElementById("userEmpCount").innerText = employees.length);
+            document.getElementById("userProjCount") && (document.getElementById("userProjCount").innerText = projects.length);
+            document.getElementById("userTaskCount") && (document.getElementById("userTaskCount").innerText = tasks.length);
+        }
+    }
+    
+    // Render employee list (Admin full control)
+    function renderAdminEmployees() {
+        const container = document.getElementById("adminEmpList");
+        if(!container) return;
+        container.innerHTML = "";
+        employees.forEach(emp => {
+            const li = document.createElement("li");
+            li.innerHTML = `<span><strong>${emp.name}</strong>  (${emp.email})</span>
+                            <div><button class="delete-btn" data-id="${emp.id}">Delete</button></div>`;
+            li.querySelector(".delete-btn").addEventListener("click", () => {
+                employees = employees.filter(e => e.id !== emp.id);
+                renderAdminEmployees();
+                updateCounters();
+                renderUserViews(); // sync user panel
+            });
+            container.appendChild(li);
+        });
+        updateCounters();
+    }
+    
+    // For user panel - read only employee list
+    function renderUserEmployees() {
+        const container = document.getElementById("userEmpList");
+        if(!container) return;
+        container.innerHTML = "";
+        employees.forEach(emp => {
+            const li = document.createElement("li");
+            li.innerHTML = `<span>👤 ${emp.name} — ${emp.email}</span>`;
+            container.appendChild(li);
+        });
+    }
+    
+    function renderAdminProjects() {
+        const projList = document.getElementById("adminProjList");
+        if(!projList) return;
+        projList.innerHTML = "";
+        projects.forEach((p, idx) => {
+            const li = document.createElement("li");
+            li.innerHTML = `<span>📁 ${p}</span><button class="delete-btn" data-projidx="${idx}">Delete</button>`;
+            li.querySelector(".delete-btn").addEventListener("click", () => {
+                projects.splice(idx, 1);
+                renderAdminProjects();
+                renderUserProjects();
+                updateCounters();
+            });
+            projList.appendChild(li);
+        });
+    }
+    
+    function renderUserProjects() {
+        const container = document.getElementById("userProjList");
+        if(!container) return;
+        container.innerHTML = "";
+        projects.forEach(p => {
+            const li = document.createElement("li");
+            li.innerHTML = `<span>📌 ${p}</span>`;
+            container.appendChild(li);
+        });
+    }
+    
+    function renderAdminTasks() {
+        const taskContainer = document.getElementById("adminTaskList");
+        if(!taskContainer) return;
+        taskContainer.innerHTML = "";
+        tasks.forEach((t, idx) => {
+            const li = document.createElement("li");
+            li.innerHTML = `<span>✅ ${t}</span><button class="delete-btn" data-taskidx="${idx}">Delete</button>`;
+            li.querySelector(".delete-btn").addEventListener("click", () => {
+                tasks.splice(idx, 1);
+                renderAdminTasks();
+                renderUserTasks();
+                updateCounters();
+            });
+            taskContainer.appendChild(li);
+        });
+    }
+    
+    function renderUserTasks() {
+        const container = document.getElementById("userTaskList");
+        if(!container) return;
+        container.innerHTML = "";
+        tasks.forEach(t => {
+            const li = document.createElement("li");
+            li.innerHTML = `<span>📋 ${t}</span>`;
+            container.appendChild(li);
+        });
+    }
+    
+    function renderAttendanceForUser() {
+        const container = document.getElementById("userAttendanceLog");
+        if(!container) return;
+        container.innerHTML = "";
+        // show only current user's attendance
+        const userLogs = attendanceRecords.filter(rec => rec.user === currentUserName);
+        if(userLogs.length === 0) {
+            container.innerHTML = "<li>No check-ins yet</li>";
+            return;
+        }
+        userLogs.forEach(rec => {
+            const li = document.createElement("li");
+            li.innerHTML = `🕒 ${rec.timestamp} (${rec.type})`;
+            container.appendChild(li);
+        });
+    }
+    
+    function renderAdminAttendance() {
+        const container = document.getElementById("adminAttendanceLog");
+        if(!container) return;
+        container.innerHTML = "";
+        if(attendanceRecords.length === 0) {
+            container.innerHTML = "<li>No attendance records</li>";
+            return;
+        }
+        attendanceRecords.forEach(rec => {
+            const li = document.createElement("li");
+            li.innerHTML = `👥 ${rec.user} — ${rec.timestamp}`;
+            container.appendChild(li);
+        });
+    }
+    
+    function markUserAttendance() {
+        const now = new Date().toLocaleString();
+        attendanceRecords.push({ user: currentUserName, timestamp: now, type: "Check In" });
+        renderAttendanceForUser();
+        if(currentRole === "admin") renderAdminAttendance();
+    }
+    
+    // Add employee (admin only)
+    function addEmployeeByAdmin(name, email) {
+        if(!name || !email) return alert("Fill both fields");
+        employees.push({ id: nextEmpId++, name, email });
+        renderAdminEmployees();
+        renderUserEmployees();
+        updateCounters();
+    }
+    
+    function addProjectByAdmin(projName) {
+        if(!projName) return;
+        projects.push(projName);
+        renderAdminProjects();
+        renderUserProjects();
+        updateCounters();
+    }
+    
+    function addTaskByAdmin(taskName) {
+        if(!taskName) return;
+        tasks.push(taskName);
+        renderAdminTasks();
+        renderUserTasks();
+        updateCounters();
+    }
+    
+    // ------ dynamic page switching (sidebar) ------
+    function switchPage(role, pageId) {
+        const pages = document.querySelectorAll(`.${role}-page`);
+        pages.forEach(page => page.classList.remove("active-page"));
+        const activePage = document.getElementById(`${role}-${pageId}`);
+        if(activePage) activePage.classList.add("active-page");
+    }
+    
+    // Build dashboard UI based on role
+    function buildDashboard(role, userName) {
+        const dashboardContainer = document.getElementById("dashboardRoot");
+        const isAdmin = (role === "admin");
+        const roleTitle = isAdmin ? "Admin Console" : "Employee Workspace";
+        const greeting = isAdmin ? `Welcome, Admin · ${userName}` : `Hello, ${userName} ✨`;
+        
+        const sidebarItems = isAdmin ? 
+            ['dashboard', 'employees', 'projects', 'tasks', 'attendance'] :
+            ['dashboard', 'employees', 'projects', 'tasks', 'attendance'];
+        
+        const displayNames = {
+            dashboard: '📊 Dashboard', employees: '👥 Employees', projects: '🚀 Projects',
+            tasks: '✅ Tasks', attendance: '📅 Attendance'
+        };
+        
+        let sidebarHtml = `<div class="sidebar-modern">
+            <div class="sidebar-header">
+                <h3>CODINWALK</h3>
+                <p>${role === 'admin' ? 'Administrator' : 'Team Member'}</p>
+            </div>
+            <div class="nav-menu">`;
+        sidebarItems.forEach(item => {
+            sidebarHtml += `<div class="nav-item" data-page="${item}">${displayNames[item]}</div>`;
+        });
+        sidebarHtml += `</div></div>`;
+        
+        // main panel content dynamic
+        let mainHtml = `<div class="main-panel">
+            <div class="top-navbar">
+                <div class="welcome-text">${greeting}</div>
+                <div class="user-actions">
+                    <div class="icon-btn notification-badge" id="notifIcon">🔔</div>
+                    <div id="notifDrop" class="notification-drop"><p>🔔 No new alerts</p><p>📌 Use sidebar</p></div>
+                    <div class="profile-dropdown" id="profileTrigger">
+                        <div class="icon-btn">👤</div>
+                        <div id="profileMenu" class="dropdown-menu"><p id="logoutBtn">🚪 Logout</p></div>
+                    </div>
+                </div>
+            </div>
+            <div class="pages-container">`;
+        
+        // Dashboard page
+        mainHtml += `<div id="${role}-dashboard" class="page-view ${role}-page active-page">
+            <h2 style="margin-bottom: 20px;">Dashboard</h2>
+            <div class="card-stats">
+                <div class="stat-card">👥 Employees<br><span id="${role}EmpCount">0</span></div>
+                <div class="stat-card">📁 Projects<br><span id="${role}ProjCount">0</span></div>
+                <div class="stat-card">✅ Tasks<br><span id="${role}TaskCount">0</span></div>
+            </div>
+            <p>📌 Real-time company overview</p>
+        </div>`;
+        
+        // Employees page
+        if(isAdmin) {
+            mainHtml += `<div id="admin-employees" class="page-view ${role}-page">
+                <h2>👥 Manage Employees</h2>
+                <div class="form-row"><input type="text" id="adminEmpNameInput" class="modern-input" placeholder="Full name">
+                <input type="email" id="adminEmpEmailInput" class="modern-input" placeholder="Email">
+                <button class="btn-primary" id="adminAddEmpBtn">+ Add Employee</button></div>
+                <ul id="adminEmpList" class="list-modern"></ul>
+            </div>`;
+        } else {
+            mainHtml += `<div id="user-employees" class="page-view ${role}-page">
+                <h2>👥 Team Members</h2>
+                <p style="margin-bottom: 12px;">View all colleagues</p>
+                <ul id="userEmpList" class="list-modern"></ul>
+            </div>`;
+        }
+        
+        // Projects page
+        if(isAdmin) {
+            mainHtml += `<div id="admin-projects" class="page-view ${role}-page">
+                <h2>📌 Manage Projects</h2>
+                <div class="form-row"><input id="adminProjInput" class="modern-input" placeholder="Project name">
+                <button class="btn-primary" id="adminAddProjBtn">+ Add Project</button></div>
+                <ul id="adminProjList" class="list-modern"></ul>
+            </div>`;
+        } else {
+            mainHtml += `<div id="user-projects" class="page-view ${role}-page">
+                <h2>📌 Active Projects</h2>
+                <ul id="userProjList" class="list-modern"></ul>
+            </div>`;
+        }
+        
+        // Tasks page
+        if(isAdmin) {
+            mainHtml += `<div id="admin-tasks" class="page-view ${role}-page">
+                <h2>📋 Task Manager</h2>
+                <div class="form-row"><input id="adminTaskInput" class="modern-input" placeholder="Task description">
+                <button class="btn-primary" id="adminAddTaskBtn">+ Add Task</button></div>
+                <ul id="adminTaskList" class="list-modern"></ul>
+            </div>`;
+        } else {
+            mainHtml += `<div id="user-tasks" class="page-view ${role}-page">
+                <h2>📋 Assigned Tasks</h2>
+                <ul id="userTaskList" class="list-modern"></ul>
+            </div>`;
+        }
+        
+        // Attendance page
+        mainHtml += `<div id="${role}-attendance" class="page-view ${role}-page">
+            <h2>📆 Attendance Tracker</h2>
+            ${!isAdmin ? `<button class="btn-primary" id="userCheckInBtn">✅ Check In (Now)</button>` : ''}
+            <ul id="${role}AttendanceLog" class="list-modern" style="margin-top: 20px;"></ul>
+        </div>`;
+        
+        mainHtml += `</div></div>`;
+        
+        dashboardContainer.innerHTML = `<div class="dashboard-container">${sidebarHtml}${mainHtml}</div>`;
+        dashboardContainer.style.display = "flex";
+        
+        // attach event listeners after dom ready
+        setTimeout(() => {
+            // sidebar navigation
+            document.querySelectorAll(".nav-item").forEach(el => {
+                const pageName = el.getAttribute("data-page");
+                el.addEventListener("click", () => {
+                    switchPage(role, pageName);
+                    document.querySelectorAll(".nav-item").forEach(nav => nav.classList.remove("nav-active"));
+                    el.classList.add("nav-active");
+                });
+                if(pageName === 'dashboard') el.classList.add("nav-active");
+            });
+            
+            // profile dropdown
+            const profileTrigger = document.getElementById("profileTrigger");
+            const profileMenu = document.getElementById("profileMenu");
+            if(profileTrigger) profileTrigger.addEventListener("click", (e) => {
+                e.stopPropagation();
+                profileMenu.style.display = profileMenu.style.display === "block" ? "none" : "block";
+            });
+            const logoutBtn = document.getElementById("logoutBtn");
+            if(logoutBtn) logoutBtn.addEventListener("click", () => location.reload());
+            
+            // notification toggle
+            const notifIcon = document.getElementById("notifIcon");
+            const notifDrop = document.getElementById("notifDrop");
+            if(notifIcon) notifIcon.addEventListener("click", (e) => {
+                e.stopPropagation();
+                notifDrop.style.display = notifDrop.style.display === "block" ? "none" : "block";
+            });
+            document.addEventListener("click", () => { if(profileMenu) profileMenu.style.display = "none"; if(notifDrop) notifDrop.style.display = "none"; });
+            
+            if(isAdmin) {
+                document.getElementById("adminAddEmpBtn")?.addEventListener("click", () => {
+                    const name = document.getElementById("adminEmpNameInput").value;
+                    const email = document.getElementById("adminEmpEmailInput").value;
+                    addEmployeeByAdmin(name, email);
+                    document.getElementById("adminEmpNameInput").value = "";
+                    document.getElementById("adminEmpEmailInput").value = "";
+                });
+                document.getElementById("adminAddProjBtn")?.addEventListener("click", () => {
+                    const val = document.getElementById("adminProjInput").value;
+                    addProjectByAdmin(val);
+                    document.getElementById("adminProjInput").value = "";
+                });
+                document.getElementById("adminAddTaskBtn")?.addEventListener("click", () => {
+                    const val = document.getElementById("adminTaskInput").value;
+                    addTaskByAdmin(val);
+                    document.getElementById("adminTaskInput").value = "";
+                });
+                renderAdminEmployees();
+                renderAdminProjects();
+                renderAdminTasks();
+                renderAdminAttendance();
+            } else {
+                // user check-in
+                document.getElementById("userCheckInBtn")?.addEventListener("click", () => markUserAttendance());
+                renderUserEmployees();
+                renderUserProjects();
+                renderUserTasks();
+                renderAttendanceForUser();
+            }
+            updateCounters();
+            if(!isAdmin) {
+                document.getElementById("userEmpCount").innerText = employees.length;
+                document.getElementById("userProjCount").innerText = projects.length;
+                document.getElementById("userTaskCount").innerText = tasks.length;
+            } else {
+                document.getElementById("adminEmpCount").innerText = employees.length;
+                document.getElementById("adminProjCount").innerText = projects.length;
+                document.getElementById("adminTaskCount").innerText = tasks.length;
+            }
+        }, 20);
+    }
+    
+    // ---------- LOGIC ----------
+    document.getElementById("doLoginBtn").addEventListener("click", () => {
+        const email = document.getElementById("loginEmail").value.trim();
+        const pwd = document.getElementById("loginPassword").value.trim();
+        const errorDiv = document.getElementById("globalError");
+        
+        if(!email) {
+            errorDiv.innerText = "Enter credentials";
+            return;
+        }
+        // Admin logic: password exactly 12345
+        if(pwd === "12345") {
+            currentRole = "admin";
+            currentUserName = email.split("@")[0] || "Admin";
+            document.getElementById("loginRoot").style.display = "none";
+            buildDashboard("admin", currentUserName);
+        } 
+        else {
+            // Any other password = user mode
+            if(pwd.length >= 1) {
+                currentRole = "user";
+                currentUserName = email.split("@")[0] || "Employee";
+                document.getElementById("loginRoot").style.display = "none";
+                buildDashboard("user", currentUserName);
+            } else {
+                errorDiv.innerText = "Password required (any for user, 12345 for admin)";
+            }
+        }
+    });
+</script>
+</body>
+</html>

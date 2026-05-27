@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Employee System</title>
+    <link rel="stylesheet" href="entry.css">
+</head>
+
+<body>
+
+<div class="main">
+
+    <!-- LEFT SIDE -->
+    <div class="left">
+        <h1>CODINWALK</h1>
+        <h2>Software Company</h2>
+        <p class="address">Jaipur</p>
+
+        <h3>Employee Management System</h3>
+
+        <ul>
+            <li>✔ Daily Report</li>
+            <li>✔ Attendance Tracking</li>
+            <li>✔ Admin Control</li>
+        </ul>
+    </div>
+
+    <!-- RIGHT SIDE LOGIN -->
+    <div class="right">
+        <div class="loginBox">
+            <h2>Login</h2>
+
+            <label> Name / Email</label>
+            <input type="text" id="username" placeholder="Enter your name">
+
+            <label>Password</label>
+            <input type="password" id="password" placeholder="Enter password">
+
+            <button onclick="login()">Login</button>
+
+            <p id="loginError"></p>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!-- AFTER LOGIN PAGE -->
+
+
+<!-- DASHBOARD WITH SIDEBAR -->
+<div id="dashboard" style="display:none;">
+
+    <div class="container">
+
+        <!-- SIDEBAR -->
+        <div class="sidebar">
+            <h2>Codinwalk Software</h2>
+
+            <ul>
+                <li onclick="showPage('home')">Dashboard</li>
+                <li onclick="showPage('employeePage')">Employee</li>
+                <li onclick="showPage('projectPage')">Projects</li>
+                <li onclick="showPage('taskPage')">Tasks</li>
+                <li onclick="showPage('attendancePage')">Attendance</li>
+                <li onclick="showPage('reportPage')">Reports</li>
+            </ul>
+        </div>
+
+        <!-- MAIN AREA -->
+        <div class="mainContent">
+
+            <!-- TOPBAR -->
+            <div class="topbar">
+                <span onclick="toggleNotification()">🔔</span>
+
+                <div class="profile" onclick="toggleProfile()">
+                    👤
+                    <div id="profileMenu" class="dropdown">
+                        <p onclick="logout()">Logout</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- NOTIFICATION BOX -->
+            <div id="notificationBox" class="notification">
+                <p>New Task Assigned</p>
+                <p>Meeting at 5 PM</p>
+            </div>
+
+            <!-- PAGES -->
+            <div id="home" class="page">
+                <h1>Dashboard</h1>
+
+                <div class="cards">
+                    <div>Employees: <span id="empCount">0</span></div>
+                    <div>Projects: <span id="projCount">0</span></div>
+                    <div>Tasks: <span id="taskCount">0</span></div>
+                </div>
+            </div>
+
+            <div id="employeePage" class="page">
+                <h2>Employee</h2>
+                <input id="empName" placeholder="Name">
+                <input id="empEmail" placeholder="Email">
+                <button onclick="addEmployee()">Add</button>
+                <ul id="empList"></ul>
+            </div>
+
+            <div id="projectPage" class="page">
+                <h2>Projects</h2>
+                <input id="projName" placeholder="Project Name">
+                <button onclick="addProject()">Add</button>
+                <ul id="projList"></ul>
+            </div>
+
+            <div id="taskPage" class="page">
+                <h2>Tasks</h2>
+                <input id="taskName" placeholder="Task">
+                <button onclick="addTask()">Add</button>
+                <ul id="taskList"></ul>
+            </div>
+
+            <div id="attendancePage" class="page">
+                <h2>Attendance</h2>
+                <button onclick="markAttendance()">Check In</button>
+                <ul id="attendanceList"></ul>
+            </div>
+
+            <div id="reportPage" class="page">
+                <h2>Reports</h2>
+                <p>Reports coming soon...</p>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<script src="entry.js"></script>
+</body>
+
+</html>
